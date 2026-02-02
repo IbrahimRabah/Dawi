@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { User, UserRole } from '../../../core/models';
 
@@ -98,7 +98,10 @@ export class SidebarComponent implements OnInit {
         }
     ];
 
-    constructor(private authService: AuthService) { }
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) { }
 
     ngOnInit(): void {
         this.authService.currentUser$.subscribe(user => {
@@ -122,6 +125,7 @@ export class SidebarComponent implements OnInit {
 
     logout(): void {
         this.authService.logout();
+        this.router.navigate(['/auth/login']);
     }
 
     getRoleLabel(role: UserRole): string {
