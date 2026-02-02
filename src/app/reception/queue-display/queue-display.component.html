@@ -1,0 +1,136 @@
+<div class="queue-display-page">
+    <!-- Header -->
+    <header class="queue-header">
+        <div class="header-left">
+            <h1>
+                <i class="fa-solid fa-list-ol"></i>
+                Queue Display
+            </h1>
+            <p>Today's patient queue management</p>
+        </div>
+        <div class="header-right">
+            <div class="clock">
+                <i class="fa-regular fa-clock"></i>
+                <span class="time">{{ currentTime | date:'HH:mm:ss' }}</span>
+                <span class="date">{{ currentTime | date:'EEEE, MMM d, yyyy' }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="value">{{ appointments.length }}</span>
+            <span class="label">Total Today</span>
+        </div>
+        <div class="stat-item waiting">
+            <span class="value">{{ waitingAppointments.length }}</span>
+            <span class="label">Waiting</span>
+        </div>
+        <div class="stat-item progress">
+            <span class="value">{{ inProgressAppointments.length }}</span>
+            <span class="label">In Progress</span>
+        </div>
+        <div class="stat-item complete">
+            <span class="value">{{ getCompletedCount() }}</span>
+            <span class="label">Completed</span>
+        </div>
+    </div>
+
+    <!-- Queue Grid -->
+    <div class="queue-grid">
+        <!-- Currently Serving -->
+        <section class="queue-section serving">
+            <h2>
+                <i class="fa-solid fa-user-check"></i>
+                Now Serving
+            </h2>
+            <div class="serving-list" *ngIf="inProgressAppointments.length > 0; else noServing">
+                <div class="serving-card" *ngFor="let apt of inProgressAppointments">
+                    <div class="queue-badge pulse">#{{ apt.queueNumber }}</div>
+                    <div class="patient-details">
+                        <h3>{{ apt.patient?.fullName || 'Unknown' }}</h3>
+                        <div class="info-row">
+                            <span class="dept">
+                                <i class="fa-solid fa-hospital"></i>
+                                {{ apt.department?.name }}
+                            </span>
+                            <span class="clinic">
+                                <i class="fa-solid fa-door-open"></i>
+                                {{ apt.clinic?.location }}
+                            </span>
+                        </div>
+                        <div class="doctor-info">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            {{ apt.doctor?.fullName }}
+                        </div>
+                    </div>
+                    <button class="complete-btn" (click)="markComplete(apt)">
+                        <i class="fa-solid fa-check"></i>
+                        Complete
+                    </button>
+                </div>
+            </div>
+            <ng-template #noServing>
+                <div class="empty-state">
+                    <i class="fa-solid fa-user-clock"></i>
+                    <p>No patient currently being served</p>
+                </div>
+            </ng-template>
+        </section>
+
+        <!-- Waiting Queue -->
+        <section class="queue-section waiting">
+            <div class="section-header">
+                <h2>
+                    <i class="fa-solid fa-clock"></i>
+                    Waiting Queue
+                </h2>
+                <button class="btn btn-primary" (click)="callNext()" [disabled]="waitingAppointments.length === 0">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    Call Next
+                </button>
+            </div>
+            <div class="waiting-list" *ngIf="waitingAppointments.length > 0; else noWaiting">
+                <div class="waiting-item" *ngFor="let apt of waitingAppointments; let i = index" [class.next]="i === 0">
+                    <div class="position">
+                        <span *ngIf="i === 0" class="next-badge">NEXT</span>
+                        <span *ngIf="i > 0">{{ i + 1 }}</span>
+                    </div>
+                    <div class="queue-number">#{{ apt.queueNumber }}</div>
+                    <div class="patient-info">
+                        <span class="name">{{ apt.patient?.fullName || 'Unknown' }}</span>
+                        <span class="dept">{{ apt.department?.name }}</span>
+                    </div>
+                    <span class="waiting-since">
+                        <i class="fa-regular fa-clock"></i>
+                        {{ apt.createdAt | date:'HH:mm' }}
+                    </span>
+                </div>
+            </div>
+            <ng-template #noWaiting>
+                <div class="empty-state">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <p>No patients waiting</p>
+                </div>
+            </ng-template>
+        </section>
+    </div>
+
+    <!-- Large Display for TV/Monitor -->
+    <div class="tv-display">
+        <div class="current-number" *ngIf="inProgressAppointments.length > 0">
+            <span class="label">Now Serving</span>
+            <span class="number pulse">#{{ inProgressAppointments[0].queueNumber }}</span>
+            <span class="location">{{ inProgressAppointments[0].clinic?.location }}</span>
+        </div>
+        <div class="next-up" *ngIf="waitingAppointments.length > 0">
+            <span class="label">Next Up</span>
+            <div class="next-numbers">
+                <span class="next-number" *ngFor="let apt of waitingAppointments.slice(0, 3)">
+                    #{{ apt.queueNumber }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

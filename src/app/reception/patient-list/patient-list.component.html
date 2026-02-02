@@ -1,0 +1,54 @@
+<div class="patient-list-page">
+    <header class="page-header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-users"></i> Patient Directory</h1>
+            <p>Browse and search registered patients</p>
+        </div>
+        <a routerLink="/reception/register" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Register Patient
+        </a>
+    </header>
+
+    <div class="search-section">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search by name, phone, or ID..." [(ngModel)]="searchQuery"
+                (input)="applyFilter()">
+        </div>
+        <span class="results-count">{{ filteredPatients.length }} patients</span>
+    </div>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading patients...</span>
+    </div>
+
+    <div class="patients-grid" *ngIf="!isLoading">
+        <div class="patient-card" *ngFor="let patient of filteredPatients">
+            <div class="patient-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="patient-info">
+                <h3>{{ patient.fullName }}</h3>
+                <div class="info-row">
+                    <span><i class="fa-solid fa-id-card"></i> {{ patient.nationalId }}</span>
+                </div>
+                <div class="info-row">
+                    <span><i class="fa-solid fa-phone"></i> {{ patient.phone }}</span>
+                    <span><i class="fa-solid fa-calendar"></i> {{ patient.age }} yrs</span>
+                </div>
+            </div>
+            <div class="patient-actions">
+                <a [routerLink]="['/reception/appointments']" class="btn btn-outline btn-sm">
+                    <i class="fa-solid fa-calendar-plus"></i> Book
+                </a>
+            </div>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredPatients.length === 0">
+            <i class="fa-solid fa-user-slash"></i>
+            <h3>No patients found</h3>
+            <p>Try a different search term</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="medical-records-page">
+    <header class="page-header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-folder-open"></i> Medical Records</h1>
+            <p>Browse and view patient medical records</p>
+        </div>
+    </header>
+
+    <div class="search-section">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search by patient or diagnosis..." [(ngModel)]="searchQuery"
+                (input)="applyFilter()">
+        </div>
+        <span class="results-count">{{ filteredRecords.length }} records</span>
+    </div>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading records...</span>
+    </div>
+
+    <div class="records-list" *ngIf="!isLoading">
+        <div class="record-card" *ngFor="let record of filteredRecords" (click)="viewRecord(record)">
+            <div class="record-date">
+                <span class="day">{{ record.visitDate | date:'dd' }}</span>
+                <span class="month">{{ record.visitDate | date:'MMM' }}</span>
+            </div>
+            <div class="record-info">
+                <h3>{{ record.patient?.fullName || 'Unknown Patient' }}</h3>
+                <p class="diagnosis">{{ record.diagnosis }}</p>
+                <div class="meta">
+                    <span><i class="fa-solid fa-prescription-bottle"></i> {{ record.prescription.length || 0 }}
+                        medications</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
+
+        <div class="empty-state" *ngIf="filteredRecords.length === 0">
+            <i class="fa-solid fa-folder-open"></i>
+            <h3>No records found</h3>
+        </div>
+    </div>
+
+    <!-- Record Detail Modal -->
+    <div class="modal-overlay" *ngIf="selectedRecord" (click)="closeModal()">
+        <div class="modal modal-lg" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-file-medical"></i> Medical Record</h2>
+                <button class="close-btn" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-section">
+                    <h4>Patient</h4>
+                    <p>{{ selectedRecord.patient?.fullName }}</p>
+                </div>
+                <div class="detail-section">
+                    <h4>Date</h4>
+                    <p>{{ selectedRecord.visitDate | date:'fullDate' }}</p>
+                </div>
+                <div class="detail-section">
+                    <h4>Diagnosis</h4>
+                    <p>{{ selectedRecord.diagnosis }}</p>
+                </div>
+                <div class="detail-section" *ngIf="selectedRecord.symptoms?.length">
+                    <h4>Symptoms</h4>
+                    <div class="tags">
+                        <span class="tag" *ngFor="let s of selectedRecord.symptoms">{{ s }}</span>
+                    </div>
+                </div>
+                <div class="detail-section" *ngIf="selectedRecord.notes">
+                    <h4>Notes</h4>
+                    <p>{{ selectedRecord.notes }}</p>
+                </div>
+                <div class="detail-section" *ngIf="selectedRecord.prescription?.length">
+                    <h4>Prescription</h4>
+                    <div class="prescription-list">
+                        <div class="rx-item" *ngFor="let rx of selectedRecord.prescription">
+                            <strong>{{ rx.medication }}</strong>
+                            <span>{{ rx.dosage }} - {{ rx.frequency }} - {{ rx.duration }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

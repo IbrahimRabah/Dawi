@@ -1,0 +1,623 @@
+{
+    "hospital": {
+        "id": "H001",
+        "name": "Dawi Medical Center",
+        "address": "123 Healthcare Avenue, Medical District",
+        "phone": "+1-555-0100",
+        "email": "info@dawimedical.com",
+        "logo": "assets/images/logo.png",
+        "createdAt": "2024-01-01T00:00:00Z"
+    },
+    "departments": [
+        {
+            "id": "DEP001",
+            "name": "Internal Medicine",
+            "description": "General internal medicine and primary care services",
+            "buildingLocation": "Building A, Floor 1",
+            "icon": "fa-stethoscope",
+            "colorCode": "#3b82f6",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DEP002",
+            "name": "Cardiology",
+            "description": "Heart and cardiovascular system specialists",
+            "buildingLocation": "Building A, Floor 2",
+            "icon": "fa-heart-pulse",
+            "colorCode": "#ef4444",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DEP003",
+            "name": "Pediatrics",
+            "description": "Children's health and development care",
+            "buildingLocation": "Building B, Floor 1",
+            "icon": "fa-baby",
+            "colorCode": "#22c55e",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DEP004",
+            "name": "Orthopedics",
+            "description": "Bone, joint, and musculoskeletal care",
+            "buildingLocation": "Building A, Floor 3",
+            "icon": "fa-bone",
+            "colorCode": "#f59e0b",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DEP005",
+            "name": "Neurology",
+            "description": "Brain and nervous system specialists",
+            "buildingLocation": "Building B, Floor 2",
+            "icon": "fa-brain",
+            "colorCode": "#8b5cf6",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DEP006",
+            "name": "Dermatology",
+            "description": "Skin, hair, and nail care specialists",
+            "buildingLocation": "Building C, Floor 1",
+            "icon": "fa-hand-dots",
+            "colorCode": "#ec4899",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        }
+    ],
+    "clinics": [
+        {
+            "id": "CLN001",
+            "name": "Internal Medicine Clinic 1",
+            "departmentId": "DEP001",
+            "location": "Room 101",
+            "operatingDays": [
+                "SUNDAY",
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY"
+            ],
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "CLN002",
+            "name": "Internal Medicine Clinic 2",
+            "departmentId": "DEP001",
+            "location": "Room 102",
+            "operatingDays": [
+                "SUNDAY",
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY"
+            ],
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "CLN003",
+            "name": "Cardiology Clinic 1",
+            "departmentId": "DEP002",
+            "location": "Room 201",
+            "operatingDays": [
+                "SUNDAY",
+                "MONDAY",
+                "WEDNESDAY",
+                "THURSDAY"
+            ],
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "CLN004",
+            "name": "Pediatrics Clinic 1",
+            "departmentId": "DEP003",
+            "location": "Room 301",
+            "operatingDays": [
+                "SUNDAY",
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY"
+            ],
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "CLN005",
+            "name": "Orthopedics Clinic 1",
+            "departmentId": "DEP004",
+            "location": "Room 401",
+            "operatingDays": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY"
+            ],
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "CLN006",
+            "name": "Neurology Clinic 1",
+            "departmentId": "DEP005",
+            "location": "Room 501",
+            "operatingDays": [
+                "SUNDAY",
+                "TUESDAY",
+                "THURSDAY"
+            ],
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        }
+    ],
+    "shifts": [
+        {
+            "id": "SHF001",
+            "clinicId": "CLN001",
+            "type": "AM",
+            "startTime": "08:00",
+            "endTime": "12:00",
+            "duration": 4,
+            "dayOfWeek": "SUNDAY",
+            "maxPatients": 20,
+            "isActive": true
+        },
+        {
+            "id": "SHF002",
+            "clinicId": "CLN001",
+            "type": "PM",
+            "startTime": "14:00",
+            "endTime": "18:00",
+            "duration": 4,
+            "dayOfWeek": "SUNDAY",
+            "maxPatients": 20,
+            "isActive": true
+        },
+        {
+            "id": "SHF003",
+            "clinicId": "CLN001",
+            "type": "AM",
+            "startTime": "08:00",
+            "endTime": "12:00",
+            "duration": 4,
+            "dayOfWeek": "MONDAY",
+            "maxPatients": 20,
+            "isActive": true
+        },
+        {
+            "id": "SHF004",
+            "clinicId": "CLN002",
+            "type": "FULL_DAY",
+            "startTime": "08:00",
+            "endTime": "16:00",
+            "duration": 8,
+            "dayOfWeek": "MONDAY",
+            "maxPatients": 40,
+            "isActive": true
+        },
+        {
+            "id": "SHF005",
+            "clinicId": "CLN003",
+            "type": "AM",
+            "startTime": "09:00",
+            "endTime": "13:00",
+            "duration": 4,
+            "dayOfWeek": "SUNDAY",
+            "maxPatients": 15,
+            "isActive": true
+        },
+        {
+            "id": "SHF006",
+            "clinicId": "CLN004",
+            "type": "PM",
+            "startTime": "14:00",
+            "endTime": "18:00",
+            "duration": 4,
+            "dayOfWeek": "TUESDAY",
+            "maxPatients": 25,
+            "isActive": true
+        }
+    ],
+    "doctors": [
+        {
+            "id": "DOC001",
+            "fullName": "Dr. Ahmed Hassan",
+            "email": "ahmed.hassan@dawimedical.com",
+            "phone": "+1-555-0101",
+            "age": 45,
+            "address": "456 Doctor's Lane",
+            "specialtyId": "DEP001",
+            "status": "ACTIVE",
+            "avatar": "assets/images/doctors/doc1.jpg",
+            "licenseNumber": "MD-2010-001",
+            "yearsOfExperience": 15,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC002",
+            "fullName": "Dr. Sarah Johnson",
+            "email": "sarah.johnson@dawimedical.com",
+            "phone": "+1-555-0102",
+            "age": 38,
+            "address": "789 Medical Plaza",
+            "specialtyId": "DEP002",
+            "status": "ACTIVE",
+            "avatar": "assets/images/doctors/doc2.jpg",
+            "licenseNumber": "MD-2012-045",
+            "yearsOfExperience": 12,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC003",
+            "fullName": "Dr. Mohamed Ali",
+            "email": "mohamed.ali@dawimedical.com",
+            "phone": "+1-555-0103",
+            "age": 52,
+            "address": "321 Health Street",
+            "specialtyId": "DEP003",
+            "status": "ACTIVE",
+            "licenseNumber": "MD-2005-012",
+            "yearsOfExperience": 20,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC004",
+            "fullName": "Dr. Fatima Omar",
+            "email": "fatima.omar@dawimedical.com",
+            "phone": "+1-555-0104",
+            "age": 41,
+            "address": "654 Care Avenue",
+            "specialtyId": "DEP004",
+            "status": "ACTIVE",
+            "licenseNumber": "MD-2010-078",
+            "yearsOfExperience": 14,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC005",
+            "fullName": "Dr. James Wilson",
+            "email": "james.wilson@dawimedical.com",
+            "phone": "+1-555-0105",
+            "age": 48,
+            "address": "987 Wellness Road",
+            "specialtyId": "DEP005",
+            "status": "ON_LEAVE",
+            "licenseNumber": "MD-2008-034",
+            "yearsOfExperience": 18,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC006",
+            "fullName": "Dr. Amira Khalil",
+            "email": "amira.khalil@dawimedical.com",
+            "phone": "+1-555-0106",
+            "age": 35,
+            "address": "159 Treatment Blvd",
+            "specialtyId": "DEP001",
+            "status": "ACTIVE",
+            "licenseNumber": "MD-2015-156",
+            "yearsOfExperience": 9,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC007",
+            "fullName": "Dr. Robert Chen",
+            "email": "robert.chen@dawimedical.com",
+            "phone": "+1-555-0107",
+            "age": 43,
+            "address": "753 Hospital Drive",
+            "specialtyId": "DEP002",
+            "status": "ACTIVE",
+            "licenseNumber": "MD-2011-089",
+            "yearsOfExperience": 13,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "DOC008",
+            "fullName": "Dr. Layla Ibrahim",
+            "email": "layla.ibrahim@dawimedical.com",
+            "phone": "+1-555-0108",
+            "age": 39,
+            "address": "246 Clinic Street",
+            "specialtyId": "DEP006",
+            "status": "ACTIVE",
+            "licenseNumber": "MD-2013-201",
+            "yearsOfExperience": 11,
+            "createdAt": "2024-01-01T00:00:00Z"
+        }
+    ],
+    "doctorShifts": [
+        {
+            "id": "DS001",
+            "doctorId": "DOC001",
+            "shiftId": "SHF001",
+            "assignedDate": "2024-01-01T00:00:00Z",
+            "isActive": true
+        },
+        {
+            "id": "DS002",
+            "doctorId": "DOC001",
+            "shiftId": "SHF003",
+            "assignedDate": "2024-01-01T00:00:00Z",
+            "isActive": true
+        },
+        {
+            "id": "DS003",
+            "doctorId": "DOC002",
+            "shiftId": "SHF005",
+            "assignedDate": "2024-01-01T00:00:00Z",
+            "isActive": true
+        },
+        {
+            "id": "DS004",
+            "doctorId": "DOC003",
+            "shiftId": "SHF006",
+            "assignedDate": "2024-01-01T00:00:00Z",
+            "isActive": true
+        },
+        {
+            "id": "DS005",
+            "doctorId": "DOC006",
+            "shiftId": "SHF002",
+            "assignedDate": "2024-01-01T00:00:00Z",
+            "isActive": true
+        },
+        {
+            "id": "DS006",
+            "doctorId": "DOC006",
+            "shiftId": "SHF004",
+            "assignedDate": "2024-01-01T00:00:00Z",
+            "isActive": true
+        }
+    ],
+    "patients": [
+        {
+            "id": "PAT001",
+            "fullName": "John Smith",
+            "age": 45,
+            "gender": "MALE",
+            "phone": "+1-555-1001",
+            "email": "john.smith@email.com",
+            "address": "123 Patient Street",
+            "nationalId": "ID-1979-001234",
+            "bloodType": "A+",
+            "chronicDiseases": [
+                "Diabetes Type 2",
+                "Hypertension"
+            ],
+            "allergies": [
+                "Penicillin"
+            ],
+            "emergencyContact": {
+                "name": "Mary Smith",
+                "phone": "+1-555-1002",
+                "relationship": "Spouse"
+            },
+            "createdAt": "2024-01-15T10:30:00Z"
+        },
+        {
+            "id": "PAT002",
+            "fullName": "Emma Wilson",
+            "age": 32,
+            "gender": "FEMALE",
+            "phone": "+1-555-1003",
+            "email": "emma.wilson@email.com",
+            "address": "456 Health Avenue",
+            "nationalId": "ID-1992-005678",
+            "bloodType": "O+",
+            "chronicDiseases": [],
+            "allergies": [],
+            "createdAt": "2024-02-01T09:00:00Z"
+        },
+        {
+            "id": "PAT003",
+            "fullName": "Ali Mohammed",
+            "age": 8,
+            "gender": "MALE",
+            "phone": "+1-555-1004",
+            "address": "789 Family Road",
+            "nationalId": "ID-2016-009012",
+            "bloodType": "B+",
+            "chronicDiseases": [
+                "Asthma"
+            ],
+            "allergies": [
+                "Dust",
+                "Pollen"
+            ],
+            "emergencyContact": {
+                "name": "Fatima Mohammed",
+                "phone": "+1-555-1005",
+                "relationship": "Mother"
+            },
+            "createdAt": "2024-02-10T14:20:00Z"
+        },
+        {
+            "id": "PAT004",
+            "fullName": "Sarah Brown",
+            "age": 55,
+            "gender": "FEMALE",
+            "phone": "+1-555-1006",
+            "email": "sarah.brown@email.com",
+            "address": "321 Senior Lane",
+            "nationalId": "ID-1969-003456",
+            "bloodType": "AB+",
+            "chronicDiseases": [
+                "Hypertension",
+                "Arthritis"
+            ],
+            "allergies": [],
+            "createdAt": "2024-01-20T11:15:00Z"
+        },
+        {
+            "id": "PAT005",
+            "fullName": "Michael Johnson",
+            "age": 28,
+            "gender": "MALE",
+            "phone": "+1-555-1007",
+            "email": "m.johnson@email.com",
+            "address": "654 Youth Street",
+            "nationalId": "ID-1996-007890",
+            "bloodType": "O-",
+            "chronicDiseases": [],
+            "allergies": [
+                "Sulfa drugs"
+            ],
+            "createdAt": "2024-02-25T16:45:00Z"
+        }
+    ],
+    "appointments": [
+        {
+            "id": "APT001",
+            "patientId": "PAT001",
+            "departmentId": "DEP001",
+            "clinicId": "CLN001",
+            "doctorId": "DOC001",
+            "shiftId": "SHF001",
+            "queueNumber": 1,
+            "visitDate": "2024-03-01T08:00:00Z",
+            "status": "COMPLETED",
+            "createdAt": "2024-02-28T10:00:00Z"
+        },
+        {
+            "id": "APT002",
+            "patientId": "PAT002",
+            "departmentId": "DEP002",
+            "clinicId": "CLN003",
+            "doctorId": "DOC002",
+            "shiftId": "SHF005",
+            "queueNumber": 1,
+            "visitDate": "2024-03-03T09:00:00Z",
+            "status": "WAITING",
+            "createdAt": "2024-03-01T14:00:00Z"
+        },
+        {
+            "id": "APT003",
+            "patientId": "PAT003",
+            "departmentId": "DEP003",
+            "clinicId": "CLN004",
+            "doctorId": "DOC003",
+            "shiftId": "SHF006",
+            "queueNumber": 3,
+            "visitDate": "2024-03-05T14:00:00Z",
+            "status": "SCHEDULED",
+            "createdAt": "2024-03-02T09:30:00Z"
+        },
+        {
+            "id": "APT004",
+            "patientId": "PAT001",
+            "departmentId": "DEP002",
+            "clinicId": "CLN003",
+            "doctorId": "DOC002",
+            "shiftId": "SHF005",
+            "queueNumber": 2,
+            "visitDate": "2024-03-03T09:30:00Z",
+            "status": "WAITING",
+            "createdAt": "2024-03-01T15:00:00Z"
+        },
+        {
+            "id": "APT005",
+            "patientId": "PAT004",
+            "departmentId": "DEP004",
+            "clinicId": "CLN005",
+            "doctorId": "DOC004",
+            "shiftId": "SHF004",
+            "queueNumber": 5,
+            "visitDate": "2024-03-04T10:00:00Z",
+            "status": "IN_PROGRESS",
+            "createdAt": "2024-03-03T08:00:00Z"
+        }
+    ],
+    "medicalRecords": [
+        {
+            "id": "MR001",
+            "patientId": "PAT001",
+            "appointmentId": "APT001",
+            "doctorId": "DOC001",
+            "diagnosis": "Upper Respiratory Infection",
+            "symptoms": [
+                "Cough",
+                "Fever",
+                "Sore Throat"
+            ],
+            "notes": "Patient presents with flu-like symptoms. Recommended rest and hydration.",
+            "prescription": [
+                {
+                    "medication": "Amoxicillin 500mg",
+                    "dosage": "1 capsule",
+                    "frequency": "3 times daily",
+                    "duration": "7 days",
+                    "notes": "Take with food"
+                },
+                {
+                    "medication": "Paracetamol 500mg",
+                    "dosage": "1-2 tablets",
+                    "frequency": "Every 6 hours as needed",
+                    "duration": "5 days",
+                    "notes": "For fever and pain"
+                }
+            ],
+            "vitals": {
+                "bloodPressure": "130/85",
+                "heartRate": 78,
+                "temperature": 38.2,
+                "weight": 82,
+                "oxygenSaturation": 97
+            },
+            "visitDate": "2024-03-01T08:30:00Z",
+            "createdAt": "2024-03-01T09:00:00Z"
+        }
+    ],
+    "users": [
+        {
+            "id": "USR001",
+            "username": "admin",
+            "email": "admin@dawimedical.com",
+            "password": "admin123",
+            "fullName": "System Administrator",
+            "role": "ADMIN",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "USR002",
+            "username": "reception1",
+            "email": "reception@dawimedical.com",
+            "password": "reception123",
+            "fullName": "Reception Staff",
+            "role": "RECEPTIONIST",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "USR003",
+            "username": "dr.ahmed",
+            "email": "ahmed.hassan@dawimedical.com",
+            "password": "doctor123",
+            "fullName": "Dr. Ahmed Hassan",
+            "role": "DOCTOR",
+            "doctorId": "DOC001",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        },
+        {
+            "id": "USR004",
+            "username": "head.internal",
+            "email": "head.internal@dawimedical.com",
+            "password": "head123",
+            "fullName": "Internal Medicine Head",
+            "role": "DEPARTMENT_HEAD",
+            "departmentId": "DEP001",
+            "isActive": true,
+            "createdAt": "2024-01-01T00:00:00Z"
+        }
+    ]
+}

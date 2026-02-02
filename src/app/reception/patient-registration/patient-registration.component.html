@@ -1,0 +1,182 @@
+<div class="patient-registration-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-user-plus"></i>
+                Patient Registration
+            </h1>
+            <p>Register a new patient in the hospital system</p>
+        </div>
+    </header>
+
+    <!-- Messages -->
+    <div class="message success" *ngIf="successMessage">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>{{ successMessage }}</span>
+    </div>
+    <div class="message error" *ngIf="errorMessage">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Registration Form -->
+    <form class="registration-form" (ngSubmit)="onSubmit()">
+        <!-- Personal Information -->
+        <div class="form-section">
+            <h3>
+                <i class="fa-solid fa-user"></i>
+                Personal Information
+            </h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" class="form-control" [(ngModel)]="patient.fullName" name="fullName"
+                        placeholder="John Smith" required>
+                </div>
+                <div class="form-group">
+                    <label for="nationalId">National ID *</label>
+                    <input type="text" id="nationalId" class="form-control" [(ngModel)]="patient.nationalId"
+                        name="nationalId" placeholder="ID-XXXX-XXXXX">
+                </div>
+                <div class="form-group">
+                    <label for="age">Age *</label>
+                    <input type="number" id="age" class="form-control" [(ngModel)]="patient.age" name="age" min="0"
+                        max="150">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender *</label>
+                    <select id="gender" class="form-control" [(ngModel)]="patient.gender" name="gender">
+                        <option *ngFor="let g of genders" [value]="g">{{ g }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-section">
+            <h3>
+                <i class="fa-solid fa-address-book"></i>
+                Contact Information
+            </h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" class="form-control" [(ngModel)]="patient.phone" name="phone"
+                        placeholder="+1-555-0100">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" [(ngModel)]="patient.email" name="email"
+                        placeholder="patient@email.com">
+                </div>
+                <div class="form-group full-width">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" class="form-control" [(ngModel)]="patient.address" name="address"
+                        placeholder="123 Main Street, City">
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Information -->
+        <div class="form-section">
+            <h3>
+                <i class="fa-solid fa-notes-medical"></i>
+                Medical Information
+            </h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="bloodType">Blood Type</label>
+                    <select id="bloodType" class="form-control" [(ngModel)]="patient.bloodType" name="bloodType">
+                        <option [value]="undefined">Unknown</option>
+                        <option *ngFor="let bt of bloodTypes" [value]="bt">{{ bt }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Chronic Diseases -->
+            <div class="tags-section">
+                <label>Chronic Diseases</label>
+                <div class="tags-input">
+                    <input type="text" [(ngModel)]="chronicDiseaseInput" name="chronicDiseaseInput"
+                        placeholder="Type and press Enter" (keyup.enter)="addChronicDisease()">
+                    <button type="button" class="btn-add" (click)="addChronicDisease()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div class="tags-list" *ngIf="patient.chronicDiseases && patient.chronicDiseases.length > 0">
+                    <span class="tag" *ngFor="let disease of patient.chronicDiseases; let i = index">
+                        {{ disease }}
+                        <button type="button" class="tag-remove" (click)="removeChronicDisease(i)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Allergies -->
+            <div class="tags-section">
+                <label>Allergies</label>
+                <div class="tags-input">
+                    <input type="text" [(ngModel)]="allergyInput" name="allergyInput" placeholder="Type and press Enter"
+                        (keyup.enter)="addAllergy()">
+                    <button type="button" class="btn-add" (click)="addAllergy()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div class="tags-list" *ngIf="patient.allergies && patient.allergies.length > 0">
+                    <span class="tag danger" *ngFor="let allergy of patient.allergies; let i = index">
+                        {{ allergy }}
+                        <button type="button" class="tag-remove" (click)="removeAllergy(i)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="form-section">
+            <h3>
+                <i class="fa-solid fa-phone-volume"></i>
+                Emergency Contact
+            </h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="emergencyName">Contact Name</label>
+                    <input type="text" id="emergencyName" class="form-control"
+                        [(ngModel)]="patient.emergencyContact!.name" name="emergencyName" placeholder="Mary Smith">
+                </div>
+                <div class="form-group">
+                    <label for="emergencyPhone">Contact Phone</label>
+                    <input type="tel" id="emergencyPhone" class="form-control"
+                        [(ngModel)]="patient.emergencyContact!.phone" name="emergencyPhone" placeholder="+1-555-0101">
+                </div>
+                <div class="form-group">
+                    <label for="emergencyRelation">Relationship</label>
+                    <input type="text" id="emergencyRelation" class="form-control"
+                        [(ngModel)]="patient.emergencyContact!.relationship" name="emergencyRelation"
+                        placeholder="Spouse, Parent, etc.">
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="button" class="btn btn-outline" (click)="resetForm()">
+                <i class="fa-solid fa-rotate-left"></i>
+                Reset Form
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                <span *ngIf="!isSubmitting">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Register Patient
+                </span>
+                <span *ngIf="isSubmitting">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    Registering...
+                </span>
+            </button>
+        </div>
+    </form>
+</div>

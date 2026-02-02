@@ -1,0 +1,211 @@
+<div class="doctor-management-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-user-doctor"></i>
+                Doctor Management
+            </h1>
+            <p>Manage hospital doctors and their assignments</p>
+        </div>
+        <button class="btn btn-primary" (click)="openAddModal()">
+            <i class="fa-solid fa-plus"></i>
+            Add Doctor
+        </button>
+    </header>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search doctors..." [(ngModel)]="searchQuery" (input)="applyFilters()">
+        </div>
+        <div class="filters-group">
+            <select class="filter-select" [(ngModel)]="filterDepartment" (change)="applyFilters()">
+                <option value="">All Departments</option>
+                <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
+            </select>
+            <select class="filter-select" [(ngModel)]="filterStatus" (change)="applyFilters()">
+                <option value="">All Status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="ON_LEAVE">On Leave</option>
+                <option value="INACTIVE">Inactive</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="mini-stat">
+            <span class="value">{{ doctors.length }}</span>
+            <span class="label">Total Doctors</span>
+        </div>
+        <div class="mini-stat success">
+            <span class="value">{{ getActiveCount() }}</span>
+            <span class="label">Active</span>
+        </div>
+        <div class="mini-stat warning">
+            <span class="value">{{ getOnLeaveCount() }}</span>
+            <span class="label">On Leave</span>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading doctors...</span>
+    </div>
+
+    <!-- Doctors Table -->
+    <div class="table-container" *ngIf="!isLoading">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Specialty</th>
+                    <th>Contact</th>
+                    <th>Experience</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let doc of filteredDoctors; let i = index" [style.animation-delay]="(i * 0.05) + 's'"
+                    class="animate-fade-in">
+                    <td>
+                        <div class="doctor-cell">
+                            <div class="doctor-avatar" [style.background]="doc.specialty?.colorCode || '#0ea5e9'">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+                            <div class="doctor-info">
+                                <span class="name">{{ doc.fullName }}</span>
+                                <span class="license">{{ doc.licenseNumber }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="specialty-badge" [style.--color]="doc.specialty?.colorCode || '#0ea5e9'">
+                            <i class="fa-solid" [ngClass]="doc.specialty?.icon || 'fa-hospital'"></i>
+                            {{ doc.specialty?.name || 'N/A' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="contact-cell">
+                            <span class="email"><i class="fa-solid fa-envelope"></i> {{ doc.email }}</span>
+                            <span class="phone"><i class="fa-solid fa-phone"></i> {{ doc.phone }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="experience">{{ doc.yearsOfExperience }} years</span>
+                    </td>
+                    <td>
+                        <span class="badge" [ngClass]="getStatusClass(doc.status)">
+                            {{ doc.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="btn-icon" title="Edit" (click)="openEditModal(doc)">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="btn-icon" title="Set Active" (click)="updateStatus(doc, DoctorStatus.ACTIVE)"
+                                *ngIf="doc.status !== 'ACTIVE'">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <button class="btn-icon warning" title="Set On Leave"
+                                (click)="updateStatus(doc, DoctorStatus.ON_LEAVE)" *ngIf="doc.status === 'ACTIVE'">
+                                <i class="fa-solid fa-pause"></i>
+                            </button>
+                            <button class="btn-icon danger" title="Delete" (click)="deleteDoctor(doc)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredDoctors.length === 0">
+            <i class="fa-solid fa-user-doctor-slash"></i>
+            <h3>No doctors found</h3>
+            <p>Try adjusting your filters or add a new doctor.</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+        <div class="modal modal-lg" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid" [ngClass]="isEditing ? 'fa-pen' : 'fa-user-plus'"></i>
+                    {{ isEditing ? 'Edit Doctor' : 'Add New Doctor' }}
+                </h2>
+                <button class="close-btn" (click)="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="docName">Full Name *</label>
+                        <input type="text" id="docName" class="form-control" [(ngModel)]="selectedDoctor.fullName"
+                            placeholder="Dr. John Smith">
+                    </div>
+                    <div class="form-group">
+                        <label for="docEmail">Email *</label>
+                        <input type="email" id="docEmail" class="form-control" [(ngModel)]="selectedDoctor.email"
+                            placeholder="doctor@hospital.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="docPhone">Phone *</label>
+                        <input type="tel" id="docPhone" class="form-control" [(ngModel)]="selectedDoctor.phone"
+                            placeholder="+1-555-0100">
+                    </div>
+                    <div class="form-group">
+                        <label for="docAge">Age</label>
+                        <input type="number" id="docAge" class="form-control" [(ngModel)]="selectedDoctor.age" min="25"
+                            max="80">
+                    </div>
+                    <div class="form-group">
+                        <label for="docSpecialty">Specialty/Department *</label>
+                        <select id="docSpecialty" class="form-control" [(ngModel)]="selectedDoctor.specialtyId">
+                            <option value="">Select Department</option>
+                            <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="docStatus">Status</label>
+                        <select id="docStatus" class="form-control" [(ngModel)]="selectedDoctor.status">
+                            <option value="ACTIVE">Active</option>
+                            <option value="ON_LEAVE">On Leave</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="docLicense">License Number *</label>
+                        <input type="text" id="docLicense" class="form-control"
+                            [(ngModel)]="selectedDoctor.licenseNumber" placeholder="MD-2024-001">
+                    </div>
+                    <div class="form-group">
+                        <label for="docExp">Years of Experience</label>
+                        <input type="number" id="docExp" class="form-control"
+                            [(ngModel)]="selectedDoctor.yearsOfExperience" min="0" max="50">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="docAddress">Address</label>
+                        <input type="text" id="docAddress" class="form-control" [(ngModel)]="selectedDoctor.address"
+                            placeholder="123 Medical Plaza">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
+                <button class="btn btn-primary" (click)="saveDoctor()">
+                    <i class="fa-solid fa-check"></i>
+                    {{ isEditing ? 'Update Doctor' : 'Add Doctor' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="schedule-page">
+    <header class="page-header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-calendar-week"></i> My Schedule</h1>
+            <p>View your weekly clinic schedule</p>
+        </div>
+    </header>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading schedule...</span>
+    </div>
+
+    <div class="schedule-grid" *ngIf="!isLoading">
+        <div class="day-column" *ngFor="let day of weekDays" [class.today]="getTodayHighlight(day)">
+            <div class="day-header">
+                <span class="day-name">{{ day | titlecase }}</span>
+                <span class="today-badge" *ngIf="getTodayHighlight(day)">Today</span>
+            </div>
+            <div class="shifts-list">
+                <div class="shift-card" *ngFor="let ds of getShiftsForDay(day)">
+                    <div class="shift-time">
+                        <i class="fa-regular fa-clock"></i>
+                        {{ ds.shift?.startTime }} - {{ ds.shift?.endTime }}
+                    </div>
+                    <div class="shift-type" [ngClass]="ds.shift?.type?.toLowerCase()">
+                        {{ ds.shift?.type }}
+                    </div>
+                    <div class="shift-clinic">
+                        <i class="fa-solid fa-door-open"></i>
+                        {{ ds.shift?.clinic?.name }}
+                    </div>
+                    <div class="shift-location">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ ds.shift?.clinic?.location }}
+                    </div>
+                </div>
+                <div class="no-shift" *ngIf="getShiftsForDay(day).length === 0">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                    <span>No shifts</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && doctorShifts.length === 0">
+        <i class="fa-solid fa-calendar-days"></i>
+        <h3>No schedule assigned</h3>
+        <p>Contact administration to set up your shifts</p>
+    </div>
+</div>

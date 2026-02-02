@@ -1,0 +1,124 @@
+<div class="shift-management-page">
+    <header class="page-header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-clock"></i> Shift Management</h1>
+            <p>Configure clinic working shifts</p>
+        </div>
+        <button class="btn btn-primary" (click)="openAddModal()">
+            <i class="fa-solid fa-plus"></i> Add Shift
+        </button>
+    </header>
+
+    <div class="filters-section">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search shifts..." [(ngModel)]="searchQuery" (input)="applyFilters()">
+        </div>
+        <select class="filter-select" [(ngModel)]="filterClinic" (change)="applyFilters()">
+            <option value="">All Clinics</option>
+            <option *ngFor="let c of clinics" [value]="c.id">{{ c.name }}</option>
+        </select>
+    </div>
+
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading shifts...</span>
+    </div>
+
+    <div class="table-container" *ngIf="!isLoading">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Clinic</th>
+                    <th>Type</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Max Patients</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let shift of filteredShifts">
+                    <td>{{ shift.clinic?.name || 'N/A' }}</td>
+                    <td><span class="badge badge-info">{{ shift.type }}</span></td>
+                    <td>{{ shift.dayOfWeek }}</td>
+                    <td>{{ shift.startTime }} - {{ shift.endTime }}</td>
+                    <td>{{ shift.maxPatients }}</td>
+                    <td>
+                        <span class="badge" [ngClass]="shift.isActive ? 'badge-success' : 'badge-danger'">
+                            {{ shift.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="btn-icon" (click)="openEditModal(shift)"><i
+                                    class="fa-solid fa-pen"></i></button>
+                            <button class="btn-icon" (click)="toggleActive(shift)">
+                                <i class="fa-solid" [ngClass]="shift.isActive ? 'fa-pause' : 'fa-play'"></i>
+                            </button>
+                            <button class="btn-icon danger" (click)="deleteShift(shift)"><i
+                                    class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="empty-state" *ngIf="filteredShifts.length === 0">
+            <i class="fa-solid fa-clock"></i>
+            <h3>No shifts found</h3>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-clock"></i> {{ isEditing ? 'Edit' : 'Add' }} Shift</h2>
+                <button class="close-btn" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Clinic *</label>
+                    <select class="form-control" [(ngModel)]="selectedShift.clinicId">
+                        <option value="">Select Clinic</option>
+                        <option *ngFor="let c of clinics" [value]="c.id">{{ c.name }}</option>
+                    </select>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select class="form-control" [(ngModel)]="selectedShift.type">
+                            <option *ngFor="let t of shiftTypes" [value]="t">{{ t }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Day</label>
+                        <select class="form-control" [(ngModel)]="selectedShift.dayOfWeek">
+                            <option *ngFor="let d of daysOfWeek" [value]="d">{{ d }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time</label>
+                        <input type="time" class="form-control" [(ngModel)]="selectedShift.startTime">
+                    </div>
+                    <div class="form-group">
+                        <label>End Time</label>
+                        <input type="time" class="form-control" [(ngModel)]="selectedShift.endTime">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Patients</label>
+                        <input type="number" class="form-control" [(ngModel)]="selectedShift.maxPatients" min="1"
+                            max="100">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
+                <button class="btn btn-primary" (click)="saveShift()">
+                    <i class="fa-solid fa-check"></i> {{ isEditing ? 'Update' : 'Add' }} Shift
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

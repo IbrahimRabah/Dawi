@@ -1,0 +1,238 @@
+<div class="medical-record-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-file-medical"></i>
+                Medical Record
+            </h1>
+            <p>Create a new medical record for the patient</p>
+        </div>
+        <a routerLink="/doctor/patients" class="btn btn-outline">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Patients
+        </a>
+    </header>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading patient data...</span>
+    </div>
+
+    <!-- Error Message -->
+    <div class="message error" *ngIf="errorMessage && !isLoading">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Success Message -->
+    <div class="message success" *ngIf="successMessage">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>{{ successMessage }}</span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="record-layout" *ngIf="appointment && !isLoading">
+        <!-- Patient Summary Card -->
+        <aside class="patient-summary">
+            <div class="summary-card">
+                <div class="patient-header">
+                    <div class="patient-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="patient-name">
+                        <h3>{{ appointment.patient?.fullName }}</h3>
+                        <span class="patient-id">{{ appointment.patient?.nationalId }}</span>
+                    </div>
+                </div>
+                <div class="patient-details">
+                    <div class="detail-row">
+                        <i class="fa-solid fa-calendar"></i>
+                        <span>Age: {{ appointment.patient?.age }} years</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa-solid fa-venus-mars"></i>
+                        <span>{{ appointment.patient?.gender }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa-solid fa-droplet"></i>
+                        <span>Blood: {{ appointment.patient?.bloodType || 'Unknown' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>{{ appointment.patient?.phone }}</span>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <div class="alerts-section"
+                    *ngIf="appointment.patient?.chronicDiseases?.length || appointment.patient?.allergies?.length">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> Medical Alerts</h4>
+                    <div class="alert-list">
+                        <span class="alert-item chronic" *ngFor="let disease of appointment.patient?.chronicDiseases">
+                            {{ disease }}
+                        </span>
+                        <span class="alert-item allergy" *ngFor="let allergy of appointment.patient?.allergies">
+                            Allergy: {{ allergy }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Record Form -->
+        <form class="record-form" (ngSubmit)="onSubmit()">
+            <!-- Vitals Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Vital Signs
+                </h3>
+                <div class="vitals-grid">
+                    <div class="vital-group">
+                        <label>Blood Pressure</label>
+                        <input type="text" [(ngModel)]="record.vitals!.bloodPressure" name="bloodPressure"
+                            placeholder="120/80">
+                        <span class="unit">mmHg</span>
+                    </div>
+                    <div class="vital-group">
+                        <label>Heart Rate</label>
+                        <input type="number" [(ngModel)]="record.vitals!.heartRate" name="heartRate" placeholder="72">
+                        <span class="unit">bpm</span>
+                    </div>
+                    <div class="vital-group">
+                        <label>Temperature</label>
+                        <input type="number" step="0.1" [(ngModel)]="record.vitals!.temperature" name="temperature"
+                            placeholder="37.0">
+                        <span class="unit">°C</span>
+                    </div>
+                    <div class="vital-group">
+                        <label>Weight</label>
+                        <input type="number" step="0.1" [(ngModel)]="record.vitals!.weight" name="weight"
+                            placeholder="70">
+                        <span class="unit">kg</span>
+                    </div>
+                    <div class="vital-group">
+                        <label>O2 Saturation</label>
+                        <input type="number" [(ngModel)]="record.vitals!.oxygenSaturation" name="oxygenSaturation"
+                            placeholder="98">
+                        <span class="unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Symptoms Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    Symptoms
+                </h3>
+                <div class="tags-input">
+                    <input type="text" [(ngModel)]="symptomInput" name="symptomInput"
+                        placeholder="Add symptom and press Enter" (keyup.enter)="addSymptom()">
+                    <button type="button" class="btn-add" (click)="addSymptom()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div class="tags-list" *ngIf="record.symptoms && record.symptoms.length > 0">
+                    <span class="tag" *ngFor="let symptom of record.symptoms; let i = index">
+                        {{ symptom }}
+                        <button type="button" class="tag-remove" (click)="removeSymptom(i)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Diagnosis Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="fa-solid fa-stethoscope"></i>
+                    Diagnosis *
+                </h3>
+                <textarea class="form-control" [(ngModel)]="record.diagnosis" name="diagnosis" rows="3"
+                    placeholder="Enter diagnosis..."></textarea>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="fa-solid fa-notes-medical"></i>
+                    Clinical Notes
+                </h3>
+                <textarea class="form-control" [(ngModel)]="record.notes" name="notes" rows="4"
+                    placeholder="Additional notes, observations, recommendations..."></textarea>
+            </div>
+
+            <!-- Prescription Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="fa-solid fa-prescription"></i>
+                    Prescription
+                </h3>
+
+                <!-- Add Prescription Form -->
+                <div class="prescription-form">
+                    <div class="prescription-grid">
+                        <div class="form-group">
+                            <label>Medication *</label>
+                            <input type="text" class="form-control" [(ngModel)]="newPrescription.medication"
+                                name="medication" placeholder="Medication name">
+                        </div>
+                        <div class="form-group">
+                            <label>Dosage *</label>
+                            <input type="text" class="form-control" [(ngModel)]="newPrescription.dosage" name="dosage"
+                                placeholder="e.g., 500mg">
+                        </div>
+                        <div class="form-group">
+                            <label>Frequency</label>
+                            <input type="text" class="form-control" [(ngModel)]="newPrescription.frequency"
+                                name="frequency" placeholder="e.g., 3 times daily">
+                        </div>
+                        <div class="form-group">
+                            <label>Duration</label>
+                            <input type="text" class="form-control" [(ngModel)]="newPrescription.duration"
+                                name="duration" placeholder="e.g., 7 days">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline" (click)="addPrescription()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Medication
+                    </button>
+                </div>
+
+                <!-- Prescription List -->
+                <div class="prescription-list" *ngIf="record.prescription && record.prescription.length > 0">
+                    <div class="prescription-item" *ngFor="let rx of record.prescription; let i = index">
+                        <div class="rx-icon">
+                            <i class="fa-solid fa-pills"></i>
+                        </div>
+                        <div class="rx-details">
+                            <span class="rx-name">{{ rx.medication }}</span>
+                            <span class="rx-info">{{ rx.dosage }} - {{ rx.frequency }} for {{ rx.duration }}</span>
+                        </div>
+                        <button type="button" class="remove-btn" (click)="removePrescription(i)">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <a routerLink="/doctor/patients" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-success" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">
+                        <i class="fa-solid fa-check"></i>
+                        Save Record & Complete Visit
+                    </span>
+                    <span *ngIf="isSubmitting">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        Saving...
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <!-- Logo Section -->
+  <div class="sidebar-header">
+    <div class="logo">
+      <i class="fa-solid fa-hospital-heart"></i>
+      <span class="logo-text" *ngIf="!isCollapsed">Dawi</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="fa-solid" [ngClass]="isCollapsed ? 'fa-angles-right' : 'fa-angles-left'"></i>
+    </button>
+  </div>
+
+  <!-- User Info -->
+  <div class="user-section" *ngIf="currentUser">
+    <div class="user-avatar">
+      <i class="fa-solid fa-user-circle"></i>
+    </div>
+    <div class="user-info" *ngIf="!isCollapsed">
+      <span class="user-name">{{ currentUser.fullName }}</span>
+      <span class="user-role">{{ getRoleLabel(currentUser.role) }}</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li *ngFor="let item of filteredNavItems" class="nav-item">
+        <a [routerLink]="item.route" 
+           routerLinkActive="active" 
+           class="nav-link"
+           [title]="isCollapsed ? item.label : ''">
+          <i [class]="item.icon"></i>
+          <span class="nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <div class="time-display" *ngIf="!isCollapsed">
+      <i class="fa-regular fa-clock"></i>
+      <span>{{ currentTime | date:'HH:mm:ss' }}</span>
+    </div>
+    <button class="logout-btn" (click)="logout()" [title]="isCollapsed ? 'Logout' : ''">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span *ngIf="!isCollapsed">Logout</span>
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,189 @@
+<div class="appointment-scheduling-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-calendar-plus"></i>
+                Schedule Appointment
+            </h1>
+            <p>Book a new appointment for a patient</p>
+        </div>
+    </header>
+
+    <div class="page-layout">
+        <!-- Appointment Form -->
+        <div class="form-container">
+            <!-- Messages -->
+            <div class="message success" *ngIf="successMessage">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>{{ successMessage }}</span>
+            </div>
+            <div class="message error" *ngIf="errorMessage">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>{{ errorMessage }}</span>
+            </div>
+
+            <form class="appointment-form" (ngSubmit)="onSubmit()">
+                <!-- Patient Search -->
+                <div class="form-section">
+                    <h3>
+                        <i class="fa-solid fa-user"></i>
+                        Select Patient
+                    </h3>
+                    <div class="patient-search">
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-search"></i>
+                            <input type="text" class="form-control" [(ngModel)]="searchPatientQuery"
+                                name="searchPatient" placeholder="Search by name, phone, or ID..."
+                                (input)="searchPatient()" (focus)="showSearchResults = searchResults.length > 0">
+                        </div>
+                        <div class="search-results" *ngIf="showSearchResults && searchResults.length > 0">
+                            <div class="search-result-item" *ngFor="let patient of searchResults"
+                                (click)="selectPatient(patient)">
+                                <div class="patient-icon">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <div class="patient-info">
+                                    <span class="name">{{ patient.fullName }}</span>
+                                    <span class="details">{{ patient.phone }} | {{ patient.nationalId }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Patient Card -->
+                    <div class="selected-patient-card" *ngIf="selectedPatient">
+                        <div class="patient-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="patient-details">
+                            <h4>{{ selectedPatient.fullName }}</h4>
+                            <div class="info-row">
+                                <span><i class="fa-solid fa-phone"></i> {{ selectedPatient.phone }}</span>
+                                <span><i class="fa-solid fa-id-card"></i> {{ selectedPatient.nationalId }}</span>
+                            </div>
+                            <div class="info-row"
+                                *ngIf="selectedPatient.chronicDiseases && selectedPatient.chronicDiseases.length > 0">
+                                <span class="warning">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    Chronic: {{ selectedPatient.chronicDiseases.join(', ') }}
+                                </span>
+                            </div>
+                        </div>
+                        <button type="button" class="clear-btn"
+                            (click)="selectedPatient = null; searchPatientQuery = ''">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Appointment Details -->
+                <div class="form-section">
+                    <h3>
+                        <i class="fa-solid fa-calendar-check"></i>
+                        Appointment Details
+                    </h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="department">Department *</label>
+                            <select id="department" class="form-control" [(ngModel)]="selectedDepartmentId"
+                                name="department" (change)="onDepartmentChange()">
+                                <option value="">Select Department</option>
+                                <option *ngFor="let dept of departments" [value]="dept.id">
+                                    {{ dept.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="clinic">Clinic *</label>
+                            <select id="clinic" class="form-control" [(ngModel)]="selectedClinicId" name="clinic"
+                                (change)="onClinicChange()" [disabled]="!selectedDepartmentId">
+                                <option value="">Select Clinic</option>
+                                <option *ngFor="let clinic of filteredClinics" [value]="clinic.id">
+                                    {{ clinic.name }} - {{ clinic.location }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="doctor">Doctor *</label>
+                            <select id="doctor" class="form-control" [(ngModel)]="selectedDoctorId" name="doctor"
+                                [disabled]="!selectedDepartmentId">
+                                <option value="">Select Doctor</option>
+                                <option *ngFor="let doc of filteredDoctors" [value]="doc.id">
+                                    {{ doc.fullName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="shift">Shift *</label>
+                            <select id="shift" class="form-control" [(ngModel)]="selectedShiftId" name="shift"
+                                [disabled]="!selectedClinicId">
+                                <option value="">Select Shift</option>
+                                <option *ngFor="let shift of filteredShifts" [value]="shift.id">
+                                    {{ formatShift(shift) }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Appointment Date *</label>
+                            <input type="date" id="date" class="form-control" [(ngModel)]="appointmentDate" name="date"
+                                [min]="('' | date:'yyyy-MM-dd')">
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <input type="text" id="notes" class="form-control" [(ngModel)]="notes" name="notes"
+                                placeholder="Optional notes...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" (click)="resetForm()">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                        <span *ngIf="!isSubmitting">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Schedule Appointment
+                        </span>
+                        <span *ngIf="isSubmitting">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            Scheduling...
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Today's Appointments Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-card">
+                <h3>
+                    <i class="fa-solid fa-calendar-day"></i>
+                    Today's Appointments
+                </h3>
+                <div class="appointment-list">
+                    <div class="appointment-item" *ngFor="let apt of appointments.slice(0, 6)">
+                        <div class="queue-number">#{{ apt.queueNumber }}</div>
+                        <div class="apt-info">
+                            <span class="patient-name">{{ apt.patient?.fullName || 'Unknown' }}</span>
+                            <span class="apt-dept">{{ apt.department?.name }}</span>
+                        </div>
+                        <span class="badge" [ngClass]="{
+              'badge-info': apt.status === 'SCHEDULED',
+              'badge-warning': apt.status === 'WAITING',
+              'badge-primary': apt.status === 'IN_PROGRESS',
+              'badge-success': apt.status === 'COMPLETED'
+            }">{{ apt.status }}</span>
+                    </div>
+                    <div class="empty-state" *ngIf="appointments.length === 0">
+                        <i class="fa-solid fa-calendar-xmark"></i>
+                        <p>No appointments today</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

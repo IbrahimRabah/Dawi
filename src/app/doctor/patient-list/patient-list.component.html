@@ -1,0 +1,173 @@
+<div class="patient-list-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-bed-pulse"></i>
+                My Patients
+            </h1>
+            <p>View and manage your assigned patients</p>
+        </div>
+    </header>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <label>Date</label>
+            <select [(ngModel)]="filterDate" (change)="applyFilters()">
+                <option value="today">Today</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Status</label>
+            <select [(ngModel)]="filterStatus" (change)="applyFilters()">
+                <option value="">All Status</option>
+                <option value="WAITING">Waiting</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+            </select>
+        </div>
+        <div class="filter-info">
+            <span>{{ filteredAppointments.length }} patients</span>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading patients...</span>
+    </div>
+
+    <!-- Patients Grid -->
+    <div class="patients-grid" *ngIf="!isLoading">
+        <div class="patient-card" *ngFor="let apt of filteredAppointments; let i = index"
+            [style.animation-delay]="(i * 0.05) + 's'"
+            [class.urgent]="apt.patient?.chronicDiseases?.length ?? 0 > 0">
+            <div class="card-header">
+                <div class="queue-badge">#{{ apt.queueNumber }}</div>
+                <span class="badge" [ngClass]="getStatusClass(apt.status)">{{ apt.status }}</span>
+            </div>
+            <div class="card-body">
+                <div class="patient-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3>{{ apt.patient?.fullName || 'Unknown' }}</h3>
+                <div class="patient-info">
+                    <span><i class="fa-solid fa-calendar"></i> Age: {{ apt.patient?.age }}</span>
+                    <span><i class="fa-solid fa-venus-mars"></i> {{ apt.patient?.gender }}</span>
+                </div>
+                <div class="chronic-warning"
+                    *ngIf="apt.patient?.chronicDiseases?.length ?? 0 > 0">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>{{ apt.patient?.chronicDiseases?.join(', ') }}</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn btn-outline" (click)="openPatientDetails(apt)">
+                    <i class="fa-solid fa-eye"></i>
+                    Details
+                </button>
+                <button class="btn btn-primary" *ngIf="apt.status === 'WAITING'" (click)="startExamination(apt)">
+                    <i class="fa-solid fa-stethoscope"></i>
+                    Examine
+                </button>
+                <a class="btn btn-success" *ngIf="apt.status === 'IN_PROGRESS'"
+                    [routerLink]="['/doctor/records/new', apt.id]">
+                    <i class="fa-solid fa-file-medical"></i>
+                    Record
+                </a>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredAppointments.length === 0">
+            <i class="fa-solid fa-calendar-xmark"></i>
+            <h3>No patients found</h3>
+            <p>No patients match your current filters.</p>
+        </div>
+    </div>
+
+    <!-- Patient Details Modal -->
+    <div class="modal-overlay" *ngIf="showDetailModal" (click)="closeModal()">
+        <div class="modal modal-lg" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid fa-user"></i>
+                    Patient Details
+                </h2>
+                <button class="close-btn" (click)="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="selectedAppointment">
+                <!-- Patient Info -->
+                <div class="detail-section">
+                    <h4>Personal Information</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="label">Full Name</span>
+                            <span class="value">{{ selectedAppointment.patient?.fullName }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Age</span>
+                            <span class="value">{{ selectedAppointment.patient?.age }} years</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Gender</span>
+                            <span class="value">{{ selectedAppointment.patient?.gender }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Phone</span>
+                            <span class="value">{{ selectedAppointment.patient?.phone }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Blood Type</span>
+                            <span class="value">{{ selectedAppointment.patient?.bloodType || 'Unknown' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">National ID</span>
+                            <span class="value">{{ selectedAppointment.patient?.nationalId }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Alerts -->
+                <div class="detail-section alerts"
+                    *ngIf="selectedAppointment.patient?.chronicDiseases?.length || selectedAppointment.patient?.allergies?.length">
+                    <h4><i class="fa-solid fa-triangle-exclamation"></i> Medical Alerts</h4>
+                    <div class="alert-tags">
+                        <span class="alert-tag chronic"
+                            *ngFor="let disease of selectedAppointment.patient?.chronicDiseases">
+                            {{ disease }}
+                        </span>
+                        <span class="alert-tag allergy" *ngFor="let allergy of selectedAppointment.patient?.allergies">
+                            Allergy: {{ allergy }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Medical History -->
+                <div class="detail-section history">
+                    <h4><i class="fa-solid fa-clock-rotate-left"></i> Medical History</h4>
+                    <div class="history-list" *ngIf="patientHistory.length > 0; else noHistory">
+                        <div class="history-item" *ngFor="let record of patientHistory.slice(0, 5)">
+                            <div class="history-date">
+                                <span class="day">{{ record.visitDate | date:'dd' }}</span>
+                                <span class="month">{{ record.visitDate | date:'MMM yyyy' }}</span>
+                            </div>
+                            <div class="history-content">
+                                <h5>{{ record.diagnosis }}</h5>
+                                <p>{{ record.notes }}</p>
+                                <span class="doctor">by {{ record.doctor?.fullName }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noHistory>
+                        <p class="no-data">No previous medical records</p>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

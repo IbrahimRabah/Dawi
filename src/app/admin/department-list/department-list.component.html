@@ -1,0 +1,126 @@
+<div class="department-list-page">
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>
+                <i class="fa-solid fa-building-columns"></i>
+                Departments
+            </h1>
+            <p>Manage hospital departments and specialties</p>
+        </div>
+        <button class="btn btn-primary" (click)="openAddModal()">
+            <i class="fa-solid fa-plus"></i>
+            Add Department
+        </button>
+    </header>
+
+    <!-- Search & Filters -->
+    <div class="filters-section">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search departments..." [(ngModel)]="searchQuery"
+                (input)="filterDepartments()">
+        </div>
+        <div class="filter-info">
+            <span class="count">{{ filteredDepartments.length }} departments</span>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <span>Loading departments...</span>
+    </div>
+
+    <!-- Departments Grid -->
+    <div class="departments-grid" *ngIf="!isLoading">
+        <div class="department-card" *ngFor="let dept of filteredDepartments; let i = index"
+            [style.animation-delay]="(i * 0.1) + 's'" [class.inactive]="!dept.isActive">
+            <div class="card-header" [style.--dept-color]="dept.colorCode || '#0ea5e9'">
+                <div class="dept-icon" [style.background]="dept.colorCode || '#0ea5e9'">
+                    <i class="fa-solid" [ngClass]="dept.icon || 'fa-hospital'"></i>
+                </div>
+                <div class="status-badge" [class.active]="dept.isActive">
+                    {{ dept.isActive ? 'Active' : 'Inactive' }}
+                </div>
+            </div>
+            <div class="card-body">
+                <h3>{{ dept.name }}</h3>
+                <p class="description">{{ dept.description }}</p>
+                <div class="location">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>{{ dept.buildingLocation }}</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn-icon" title="Edit" (click)="openEditModal(dept)">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="btn-icon" title="Toggle Status" (click)="toggleStatus(dept)">
+                    <i class="fa-solid" [ngClass]="dept.isActive ? 'fa-toggle-on' : 'fa-toggle-off'"></i>
+                </button>
+                <button class="btn-icon danger" title="Delete" (click)="deleteDepartment(dept)">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredDepartments.length === 0">
+            <i class="fa-solid fa-building-circle-xmark"></i>
+            <h3>No departments found</h3>
+            <p>Try adjusting your search or add a new department.</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-solid" [ngClass]="isEditing ? 'fa-pen' : 'fa-plus'"></i>
+                    {{ isEditing ? 'Edit Department' : 'Add Department' }}
+                </h2>
+                <button class="close-btn" (click)="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="deptName">Department Name *</label>
+                    <input type="text" id="deptName" class="form-control" [(ngModel)]="selectedDepartment.name"
+                        placeholder="e.g., Cardiology">
+                </div>
+                <div class="form-group">
+                    <label for="deptDesc">Description</label>
+                    <textarea id="deptDesc" class="form-control" [(ngModel)]="selectedDepartment.description" rows="3"
+                        placeholder="Brief description of the department"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="deptLocation">Building Location *</label>
+                    <input type="text" id="deptLocation" class="form-control"
+                        [(ngModel)]="selectedDepartment.buildingLocation" placeholder="e.g., Building A, Floor 2">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="deptIcon">Icon Class</label>
+                        <input type="text" id="deptIcon" class="form-control" [(ngModel)]="selectedDepartment.icon"
+                            placeholder="fa-hospital">
+                    </div>
+                    <div class="form-group">
+                        <label for="deptColor">Color</label>
+                        <input type="color" id="deptColor" class="form-control color-input"
+                            [(ngModel)]="selectedDepartment.colorCode">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
+                <button class="btn btn-primary" (click)="saveDepartment()">
+                    <i class="fa-solid fa-check"></i>
+                    {{ isEditing ? 'Update' : 'Create' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

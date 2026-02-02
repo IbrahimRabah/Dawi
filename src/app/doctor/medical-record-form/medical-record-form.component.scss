@@ -1,0 +1,491 @@
+.medical-record-page {
+    padding: 0;
+}
+
+// Page Header
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    .header-content {
+        h1 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.25rem;
+
+            i {
+                color: #22c55e;
+            }
+        }
+
+        p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    }
+}
+
+// Loading State
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    color: #64748b;
+
+    i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #0ea5e9;
+    }
+}
+
+// Messages
+.message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+
+    &.success {
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+    }
+
+    &.error {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+    }
+}
+
+// Record Layout
+.record-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+// Patient Summary
+.patient-summary {
+    position: sticky;
+    top: 2rem;
+}
+
+.summary-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+
+    .patient-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), transparent);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+        .patient-avatar {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 14px;
+
+            i {
+                font-size: 1.5rem;
+                color: white;
+            }
+        }
+
+        .patient-name {
+            h3 {
+                font-size: 1.125rem;
+                font-weight: 600;
+                color: #f1f5f9;
+                margin-bottom: 0.125rem;
+            }
+
+            .patient-id {
+                font-size: 0.75rem;
+                color: #64748b;
+                font-family: monospace;
+            }
+        }
+    }
+
+    .patient-details {
+        padding: 1.25rem;
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: #94a3b8;
+            font-size: 0.875rem;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            }
+
+            i {
+                width: 20px;
+                color: #64748b;
+            }
+        }
+    }
+
+    .alerts-section {
+        padding: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(245, 158, 11, 0.05);
+
+        h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .alert-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+        }
+
+        .alert-item {
+            padding: 0.25rem 0.625rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+
+            &.chronic {
+                background: rgba(245, 158, 11, 0.2);
+                color: #f59e0b;
+            }
+
+            &.allergy {
+                background: rgba(239, 68, 68, 0.2);
+                color: #ef4444;
+            }
+        }
+    }
+}
+
+// Record Form
+.record-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+// Form Section
+.form-section {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 1.25rem;
+
+    h3 {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-bottom: 1rem;
+
+        i {
+            color: #0ea5e9;
+        }
+    }
+}
+
+// Vitals Grid
+.vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.vital-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    position: relative;
+
+    label {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    input {
+        padding: 0.75rem;
+        padding-right: 2.5rem;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #f1f5f9;
+        font-size: 1rem;
+        text-align: center;
+
+        &:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+    }
+
+    .unit {
+        position: absolute;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        font-size: 0.7rem;
+        color: #64748b;
+    }
+}
+
+// Tags Input
+.tags-input {
+    display: flex;
+    gap: 0.5rem;
+
+    input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #f1f5f9;
+
+        &:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+    }
+
+    .btn-add {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    border-radius: 20px;
+    color: #0ea5e9;
+    font-size: 0.8rem;
+
+    .tag-remove {
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 50%;
+        color: inherit;
+        cursor: pointer;
+        font-size: 0.6rem;
+    }
+}
+
+// Form Control
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    resize: vertical;
+
+    &:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+    }
+}
+
+// Prescription Form
+.prescription-form {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+
+    .prescription-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        label {
+            display: block;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0.375rem;
+        }
+
+        .form-control {
+            padding: 0.625rem;
+            font-size: 0.85rem;
+        }
+    }
+}
+
+// Prescription List
+.prescription-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.prescription-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem;
+    background: rgba(34, 197, 94, 0.05);
+    border: 1px solid rgba(34, 197, 94, 0.1);
+    border-radius: 10px;
+
+    .rx-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(34, 197, 94, 0.15);
+        border-radius: 10px;
+        color: #22c55e;
+    }
+
+    .rx-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .rx-name {
+            font-weight: 600;
+            color: #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        .rx-info {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+    }
+
+    .remove-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 8px;
+        color: #ef4444;
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+    }
+}
+
+// Form Actions
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 0.5rem;
+}
+
+// Responsive
+@media (max-width: 1024px) {
+    .record-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .patient-summary {
+        position: static;
+    }
+
+    .vitals-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .vitals-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .prescription-form .prescription-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+
+        .btn {
+            width: 100%;
+        }
+    }
+}

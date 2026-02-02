@@ -1,0 +1,484 @@
+.queue-display-page {
+    padding: 0;
+}
+
+// Header
+.queue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    .header-left {
+        h1 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.25rem;
+
+            i {
+                color: #f59e0b;
+            }
+        }
+
+        p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    }
+
+    .clock {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+
+        i {
+            display: none;
+        }
+
+        .time {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0ea5e9;
+        }
+
+        .date {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+    }
+}
+
+// Stats Bar
+.stats-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .stat-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.25rem;
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+
+        .value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0ea5e9;
+            line-height: 1;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+
+        &.waiting .value {
+            color: #f59e0b;
+        }
+
+        &.progress .value {
+            color: #8b5cf6;
+        }
+
+        &.complete .value {
+            color: #22c55e;
+        }
+    }
+}
+
+// Queue Grid
+.queue-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+// Queue Section
+.queue-section {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+
+    h2,
+    .section-header h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin: 0;
+
+        i {
+            color: #0ea5e9;
+        }
+    }
+
+    &.serving h2 i {
+        color: #22c55e;
+    }
+
+    &.waiting h2 i {
+        color: #f59e0b;
+    }
+
+    >h2 {
+        padding: 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+// Serving List
+.serving-list {
+    padding: 1rem;
+}
+
+.serving-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.05));
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 14px;
+    margin-bottom: 0.75rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .queue-badge {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        border-radius: 16px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: white;
+        box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+
+        &.pulse {
+            animation: glow 2s ease-in-out infinite;
+        }
+    }
+
+    .patient-details {
+        flex: 1;
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.375rem;
+
+            i {
+                margin-right: 0.375rem;
+                color: #64748b;
+            }
+        }
+
+        .doctor-info {
+            font-size: 0.85rem;
+            color: #22c55e;
+
+            i {
+                margin-right: 0.375rem;
+            }
+        }
+    }
+
+    .complete-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+    }
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 8px 40px rgba(34, 197, 94, 0.5);
+    }
+}
+
+// Waiting List
+.waiting-list {
+    padding: 0.75rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.waiting-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    &.next {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .position {
+        width: 40px;
+        text-align: center;
+        font-weight: 600;
+        color: #64748b;
+
+        .next-badge {
+            padding: 0.25rem 0.5rem;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 4px;
+            font-size: 0.6rem;
+            color: white;
+        }
+    }
+
+    .queue-number {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(14, 165, 233, 0.15);
+        border-radius: 10px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #0ea5e9;
+    }
+
+    .patient-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .name {
+            font-weight: 600;
+            color: #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        .dept {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+    }
+
+    .waiting-since {
+        font-size: 0.8rem;
+        color: #64748b;
+
+        i {
+            margin-right: 0.25rem;
+        }
+    }
+}
+
+// Empty State
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #64748b;
+
+    i {
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+        opacity: 0.4;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+}
+
+// TV Display
+.tv-display {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+
+    .current-number {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), transparent);
+        border-radius: 16px;
+
+        .label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .location {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 20px;
+            color: #22c55e;
+            font-size: 0.875rem;
+        }
+    }
+
+    .next-up {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem;
+
+        .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .next-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .next-number {
+            padding: 0.75rem 1.5rem;
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 10px;
+            color: #0ea5e9;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+    }
+}
+
+// Responsive
+@media (max-width: 1024px) {
+    .queue-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tv-display {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .queue-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+
+        .clock {
+            align-items: center;
+        }
+    }
+
+    .stats-bar {
+        flex-wrap: wrap;
+
+        .stat-item {
+            flex: 1 0 45%;
+        }
+    }
+
+    .serving-card {
+        flex-direction: column;
+        text-align: center;
+
+        .patient-details .info-row {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    }
+}
